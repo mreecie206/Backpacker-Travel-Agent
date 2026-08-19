@@ -11,7 +11,7 @@ sys.path.insert(0, str(project_root / "routes"))
 from routes.agent import agent_bp
 
 app = Flask(__name__)
-app.register_blueprint(agent_bp)
+app.register_blueprint(agent_bp, url_prefix="/api")
 
 @app.route("/")
 def hello():

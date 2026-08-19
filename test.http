@@ -1,4 +1,4 @@
-POST http://localhost:5000/plan_trip
+POST http://localhost:5000/api/plan_trip
 Content-Type: application/json
 
 {
