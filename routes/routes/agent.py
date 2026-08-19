@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from logic.accommodation import get_accommodations
-from logic.costs import get_costs
+from logic.costs import COST_TABLES, get_costs
 from logic.flights import get_live_flight_price
 from logic.optimizer import find_cheapest_route
 from logic.prompt import SYSTEM_PROMPT
@@ -13,6 +13,37 @@ from logic.visa import get_visa_requirements
 
 print("AGENT BLUEPRINT LOADED")
 agent_bp = Blueprint("agent", __name__)
+
+
+@agent_bp.get("/countries")
+def countries():
+    """Return the countries supported by the travel-planning cost model."""
+    return jsonify({
+        "countries": [
+            country.replace("_", " ").title()
+            for country in sorted(COST_TABLES)
+        ],
+        "count": len(COST_TABLES),
+    })
+
+
+@agent_bp.get("/countries/<string:country>")
+def country_data(country):
+    """Return cost data for one supported country."""
+    costs = get_costs(country)
+    if costs is None:
+        return jsonify({
+            "error": f"No cost data is available for {country}.",
+            "available_countries": [
+                name.replace("_", " ").title()
+                for name in sorted(COST_TABLES)
+            ],
+        }), 404
+
+    return jsonify({
+        "country": country.replace("_", " ").title(),
+        "costs": costs,
+    })
 
 
 @agent_bp.route("/plan_trip", methods=["POST"])
