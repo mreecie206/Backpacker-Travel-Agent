@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-from flask import Flask
+from flask import Flask, render_template
 
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root / "logic"))
@@ -14,8 +14,9 @@ app = Flask(__name__)
 app.register_blueprint(agent_bp, url_prefix="/api")
 
 @app.route("/")
+@app.get("/plan_trip")
 def hello():
-    return "Hello, Railway!"
+    return render_template("index.html")
 
 @app.get("/health")
 def health():
