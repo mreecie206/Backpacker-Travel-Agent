@@ -1,0 +1,8 @@
+POST http://localhost:5000/plan_trip
+Content-Type: application/json
+
+{
+  "origin": "Seattle",
+  "destination": "Vietnam",
+  "cities": ["Hanoi", "Da Nang", "Ho Chi Minh City"]
+}
