@@ -122,12 +122,20 @@
           countryList.appendChild(item);
         });
         countryStatus.textContent = `${data.count} destinations with local cost data`;
+        if (data.countries.length) await showCountry(data.countries[0]);
       } catch (error) { countryStatus.textContent = error.message; }
     }
 
     async function showCountry(country) {
-      const response = await fetch(`/api/countries/${encodeURIComponent(country)}`);
-      result.textContent = JSON.stringify(await readResponse(response), null, 2);
+      result.textContent = `Loading cost data for ${country}...`;
+      try {
+        const response = await fetch(`/api/countries/${encodeURIComponent(country)}`);
+        const data = await readResponse(response);
+        if (!response.ok) throw new Error(data.error || `Could not load cost data for ${country}`);
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        result.textContent = JSON.stringify({error: error.message}, null, 2);
+      }
     }
 
     document.querySelector('#refresh').addEventListener('click', loadCountries);

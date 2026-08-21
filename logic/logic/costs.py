@@ -89,5 +89,7 @@ COST_TABLES = {
 }
 
 def get_costs(country: str):
-    key = country.lower().replace(" ", "_")
+    if not isinstance(country, str):
+        return None
+    key = "_".join(country.strip().lower().split())
     return COST_TABLES.get(key, None)
