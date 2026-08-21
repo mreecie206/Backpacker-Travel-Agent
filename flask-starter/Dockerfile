@@ -6,7 +6,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
-COPY flask-starter/templates/ ./templates/
+COPY flask-starter/templates/ ./flask-starter/templates/
 COPY logic/ ./logic/
 COPY routes/ ./routes/
 COPY wsgi.py .
